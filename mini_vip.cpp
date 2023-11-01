@@ -270,7 +270,7 @@ void CRoundPreStartEvent::FireGameEvent(IGameEvent* event)
 {
 	if (g_pGameRules)
 	{
-		g_bPistolRound = g_pGameRules->m_totalRoundsPlayed() == 0 || (g_pGameRules->m_bSwitchingTeamsAtRoundReset() && g_pGameRules->m_nOvertimePlaying() == 0) || g_pGameRules->m_bGameRestart();
+		g_bPistolRound = g_pGameRules->m_nRoundsPlayedThisPhase() == 0 || (g_pGameRules->m_bSwitchingTeamsAtRoundReset() && g_pGameRules->m_nOvertimePlaying() == 0) || g_pGameRules->m_bGameRestart();
 	}
 }
 

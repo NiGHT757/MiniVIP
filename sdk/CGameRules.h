@@ -35,5 +35,6 @@ public:
 	SCHEMA_FIELD(GamePhase, CCSGameRules, m_gamePhase);
 	SCHEMA_FIELD(int32_t, CCSGameRules, m_totalRoundsPlayed);
 	SCHEMA_FIELD(int32_t, CCSGameRules, m_nOvertimePlaying);
+	SCHEMA_FIELD(int32_t, CCSGameRules, m_nRoundsPlayedThisPhase);
 	SCHEMA_FIELD(bool, CCSGameRules, m_bSwitchingTeamsAtRoundReset);
 };
