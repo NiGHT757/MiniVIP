@@ -284,10 +284,8 @@ void CRoundPreStartEvent::FireGameEvent(IGameEvent* event)
 	if (g_pGameRules)
 	{
 		ConVar* cvar = g_pCVar->GetConVar(g_pCVar->FindConVar("mp_maxmoney"));
-
 		memcpy(&g_iMaxMoney, &cvar->values, sizeof(g_iMaxMoney));
 
-		ConColorMsg({ 0, 255, 0, 255 }, "Max Money %d\n", g_iMaxMoney);
 		g_bPistolRound = g_pGameRules->m_nRoundsPlayedThisPhase() == 0 || (g_pGameRules->m_bSwitchingTeamsAtRoundReset() && g_pGameRules->m_nOvertimePlaying() == 0) || g_pGameRules->m_bGameRestart();
 	}
 }
