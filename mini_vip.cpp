@@ -42,6 +42,7 @@ CPlayerSpawnEvent g_PlayerSpawnEvent;
 CRoundPreStartEvent g_RoundPreStartEvent;
 CEntityListener g_EntityListener;
 bool g_bPistolRound;
+int g_iMaxMoney;
 std::map<uint32, VipPlayer> g_VipPlayers;
 
 class GameSessionConfiguration_t { };
@@ -227,8 +228,20 @@ void CPlayerSpawnEvent::FireGameEvent(IGameEvent* event)
 		{
 			CCSPlayerController_InGameMoneyServices* pMoneyServices = pPlayerController->m_pInGameMoneyServices();
 
-			if (data.m_iMoneyAdd != -1)
-				pMoneyServices->m_iAccount() += data.m_iMoneyAdd;
+			if(data.m_iMoneyAdd != -1)
+			{
+				int iMoney = pMoneyServices->m_iAccount();
+
+				if(iMoney < g_iMaxMoney)
+				{
+					iMoney += data.m_iMoneyAdd;
+
+					if(iMoney > g_iMaxMoney)
+						iMoney = g_iMaxMoney;
+				
+					pMoneyServices->m_iAccount() = iMoney;
+				}
+			}
 
 			if (data.m_iMoneyMin != -1)
 			{
@@ -270,7 +283,10 @@ void CRoundPreStartEvent::FireGameEvent(IGameEvent* event)
 {
 	if (g_pGameRules)
 	{
-		g_bPistolRound = g_pGameRules->m_totalRoundsPlayed() == 0 || (g_pGameRules->m_bSwitchingTeamsAtRoundReset() && g_pGameRules->m_nOvertimePlaying() == 0) || g_pGameRules->m_bGameRestart();
+		ConVar* cvar = g_pCVar->GetConVar(g_pCVar->FindConVar("mp_maxmoney"));
+		memcpy(&g_iMaxMoney, &cvar->values, sizeof(g_iMaxMoney));
+
+		g_bPistolRound = g_pGameRules->m_nRoundsPlayedThisPhase() == 0 || (g_pGameRules->m_bSwitchingTeamsAtRoundReset() && g_pGameRules->m_nOvertimePlaying() == 0) || g_pGameRules->m_bGameRestart();
 	}
 }
 
