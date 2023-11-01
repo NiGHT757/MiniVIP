@@ -227,16 +227,19 @@ void CPlayerSpawnEvent::FireGameEvent(IGameEvent* event)
 		{
 			CCSPlayerController_InGameMoneyServices* pMoneyServices = pPlayerController->m_pInGameMoneyServices();
 
-
-			// start money check
 			if(data.m_iMoneyAdd != -1)
 			{
-				int iMoney = pMoneyServices->m_iAccount() + data.m_iMoneyAdd;
+				int iMoney = pMoneyServices->m_iAccount();
 
-				if(iMoney > 16000)
-					iMoney = 16000;
+				if(iMoney < g_iMaxMoney)
+				{
+					iMoney += data.m_iMoneyAdd;
+
+					if(iMoney > g_iMaxMoney)
+						iMoney = g_iMaxMoney;
 				
-				pMoneyServices->m_iAccount() = iMoney;
+					pMoneyServices->m_iAccount() = iMoney;
+				}
 			}
 
 			if (data.m_iMoneyMin != -1)
@@ -275,16 +278,17 @@ void CPlayerSpawnEvent::FireGameEvent(IGameEvent* event)
 	});
 }
 
+int g_iMaxMoney;
+
 void CRoundPreStartEvent::FireGameEvent(IGameEvent* event)
 {
 	if (g_pGameRules)
 	{
 		ConVar* cvar = g_pCVar->GetConVar(g_pCVar->FindConVar("mp_maxmoney"));
 
-		int iC4;
-		memcpy(&iC4, &cvar->values, sizeof(iC4));
+		memcpy(&g_iMaxMoney, &cvar->values, sizeof(g_iMaxMoney));
 
-		ConColorMsg({ 0, 255, 0, 255 }, "Max Money %d\n", iC4);
+		ConColorMsg({ 0, 255, 0, 255 }, "Max Money %d\n", g_iMaxMoney);
 		g_bPistolRound = g_pGameRules->m_nRoundsPlayedThisPhase() == 0 || (g_pGameRules->m_bSwitchingTeamsAtRoundReset() && g_pGameRules->m_nOvertimePlaying() == 0) || g_pGameRules->m_bGameRestart();
 	}
 }
