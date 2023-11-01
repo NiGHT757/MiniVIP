@@ -227,8 +227,17 @@ void CPlayerSpawnEvent::FireGameEvent(IGameEvent* event)
 		{
 			CCSPlayerController_InGameMoneyServices* pMoneyServices = pPlayerController->m_pInGameMoneyServices();
 
-			if (data.m_iMoneyAdd != -1)
-				pMoneyServices->m_iAccount() += data.m_iMoneyAdd;
+
+			// start money check
+			if(data.m_iMoneyAdd != -1)
+			{
+				int iMoney = pMoneyServices->m_iAccount() + data.m_iMoneyAdd;
+
+				if(iMoney > 16000)
+					iMoney = 16000;
+				
+				pMoneyServices->m_iAccount() = iMoney;
+			}
 
 			if (data.m_iMoneyMin != -1)
 			{
