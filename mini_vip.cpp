@@ -42,6 +42,7 @@ CPlayerSpawnEvent g_PlayerSpawnEvent;
 CRoundPreStartEvent g_RoundPreStartEvent;
 CEntityListener g_EntityListener;
 bool g_bPistolRound;
+int g_iMaxMoney;
 std::map<uint32, VipPlayer> g_VipPlayers;
 
 class GameSessionConfiguration_t { };
@@ -277,8 +278,6 @@ void CPlayerSpawnEvent::FireGameEvent(IGameEvent* event)
 		}
 	});
 }
-
-int g_iMaxMoney;
 
 void CRoundPreStartEvent::FireGameEvent(IGameEvent* event)
 {
